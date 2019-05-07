@@ -19,9 +19,29 @@ def setup_selenium_driver():
 
 def parse(selenium_driver):
     logging.info('staring parsing')
-    # Implement your parsing code here
-    result = [['Vinyasa Yoga', 'So', '10:00', '12:00', 'Einführung in Vinyasa Yoga'],
-              ['Karate', 'So', '13:00', '15:00', 'Einführung in Karate']]
+    ## Implemented CODE by Ivan Miletic
+    # define the driver
+    driver = setup_selenium_driver()
+    # base url
+    url = 'https://www.tv-ratingen.de/de/ueber-uns/sportsuche/?Special_Club_SearchList843_page='
+    result = []
+    # for pages from 1 to 7 i used range()
+    for x in range(1,8):
+        driver.get(f"{url}{x}")
+        # finding elements using xpath
+        t1 = driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/div/div[2]/div[2]/div/div/div[2]/table/tbody/tr[*]/td[1]')
+        t2 = driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/div/div[2]/div[2]/div/div/div[2]/table/tbody/tr[*]/td[2]')
+        t3 = driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/div/div[2]/div[2]/div/div/div[2]/table/tbody/tr[*]/td[3]')
+        t4 = driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/div/div[2]/div[2]/div/div/div[2]/table/tbody/tr[*]/td[4]')
+        
+        # create lists and append to result
+        for num in range(len(t1)):
+            result.append([t1[num].text, t2[num].text.split('-')[0].strip(), t2[num].text.split('-')[1].strip(), t3[num].text, t4[num].text])
+
+    #print(lista)
+    # close driver
+    driver.close()
+    ## END of implemeted code!
     logging.info('finished parsing results')
     return result
 
